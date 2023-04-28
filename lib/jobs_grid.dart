@@ -10,8 +10,6 @@ import 'package:pluto_grid_riverpod_example/jobs_repository.dart';
 class JobsGrid extends ConsumerWidget {
   const JobsGrid({super.key});
 
-  static const plutoGridKey = GlobalObjectKey('jobs pluto grid');
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     print('Rebuilding job grid');
@@ -20,25 +18,27 @@ class JobsGrid extends ConsumerWidget {
         error: (error, stackTrace) => Text(error.toString()),
         loading: () => const Center(child: CircularProgressIndicator()),
         data: (jobEntries) {
-          print('When job grid');
           final List<PlutoRow> rows = jobEntries.map(rowBuilder).toList();
           return SizedBox(
             height: 600,
             child: PlutoGrid(
-              key: plutoGridKey,
+              //even though the rows and cells have keys,
+              // the pluto grid itself need it's own key that changes on the row
+              // key: ObjectKey(rows),
               noRowsWidget: const Text('You have no jobs entered.'),
               columns: createJobColumns(),
-              rows: rows,
+              rows: [...rows],
               configuration: const PlutoGridConfiguration(),
             ),
           );
         });
   }
 
-  PlutoRow rowBuilder(Job job) => PlutoRow(cells: {
-        'id': PlutoCell(value: job.id),
-        'name': PlutoCell(value: job.name),
-        'ratePerHour': PlutoCell(value: job.ratePerHour),
-        'actions': PlutoCell(value: ''),
+  PlutoRow rowBuilder(Job job) => PlutoRow(key: ObjectKey(job), cells: {
+        'id': PlutoCell(value: job.id, key: ValueKey('${job.id}-id')),
+        'name': PlutoCell(value: job.name, key: ValueKey('${job.id}-name')),
+        'ratePerHour':
+            PlutoCell(value: job.ratePerHour, key: ValueKey('${job.id}-rate')),
+        'actions': PlutoCell(value: '', key: ValueKey('${job.id}-actions')),
       });
 }
