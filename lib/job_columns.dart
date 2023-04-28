@@ -5,7 +5,7 @@ import 'package:pluto_grid_riverpod_example/jobs_repository.dart';
 
 import 'job.dart';
 
-List<PlutoColumn> createJobColumns(WidgetRef ref) {
+List<PlutoColumn> createJobColumns() {
   return [
     PlutoColumn(title: 'Id', field: 'id', type: PlutoColumnType.text()),
     PlutoColumn(
@@ -23,23 +23,33 @@ List<PlutoColumn> createJobColumns(WidgetRef ref) {
       field: 'actions',
       type: PlutoColumnType.text(),
       renderer: (rendererContext) {
-        return Row(
-          children: [
-            IconButton(
-              icon: const Icon(
-                Icons.delete,
-              ),
-              onPressed: () async {
-                JobID jobID = rendererContext.row.cells["id"]?.value as JobID;
-                await ref.read(jobsRepositoryProvider).deleteJob(jobId: jobID);
-              },
-              iconSize: 18,
-              color: Colors.green,
-              padding: const EdgeInsets.all(0),
-            ),
-          ],
-        );
+        final jobId = rendererContext.row.cells["id"]?.value as JobID;
+        return DeleteJobButton(jobID: jobId);
       },
     )
   ];
+}
+
+class DeleteJobButton extends ConsumerWidget {
+  final JobID jobID;
+
+  const DeleteJobButton({
+    required this.jobID,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return IconButton(
+      icon: const Icon(
+        Icons.delete,
+      ),
+      onPressed: () async {
+        await ref.read(jobsRepositoryProvider).deleteJob(jobId: jobID);
+      },
+      iconSize: 18,
+      color: Colors.green,
+      padding: const EdgeInsets.all(0),
+    );
+  }
 }
