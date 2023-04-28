@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
                 padding: EdgeInsets.all(8.0),
                 child: SizedBox(
                   height: 300,
-                  child: JobsGrid(key: gridKey),
+                  child: JobsGrid(),
                 ),
               ),
               SizedBox(
