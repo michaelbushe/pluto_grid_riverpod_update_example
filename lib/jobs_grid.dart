@@ -10,6 +10,8 @@ import 'package:pluto_grid_riverpod_example/jobs_repository.dart';
 class JobsGrid extends ConsumerWidget {
   const JobsGrid({super.key});
 
+  static const plutoGridKey = GlobalObjectKey('jobs pluto grid');
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     print('Rebuilding job grid');
@@ -23,6 +25,7 @@ class JobsGrid extends ConsumerWidget {
           return SizedBox(
             height: 600,
             child: PlutoGrid(
+              key: plutoGridKey,
               noRowsWidget: const Text('You have no jobs entered.'),
               columns: createJobColumns(),
               rows: rows,

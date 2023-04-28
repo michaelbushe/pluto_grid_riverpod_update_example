@@ -21,7 +21,7 @@ int lastRate = 100;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
+  static const gridKey = GlobalObjectKey('JobsGrid');
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
                 padding: EdgeInsets.all(8.0),
                 child: SizedBox(
                   height: 300,
-                  child: JobsGrid(),
+                  child: JobsGrid(key: gridKey),
                 ),
               ),
               SizedBox(
